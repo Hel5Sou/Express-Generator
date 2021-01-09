@@ -8,7 +8,7 @@ var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 const campsiteRouter = require('./routes/campsiteRouter');
 const promotionRouter = require('./routes/promotionRouter');
-const partnerRouter = require('./routes/partnerRoute');
+const partnerRouter = require('./routes/partnerRouter');
 
 const mongoose = require('mongoose');
 
