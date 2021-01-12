@@ -3,6 +3,8 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+const session = require('express-session');
+const FileStore = require('session-file-store')(session); //retriving another function as it's value because here are two sessions
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
@@ -33,11 +35,43 @@ app.set('view engine', 'jade');
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
+//app.use(cookieParser('12345-67890-09876-54321')); //any string here which could be use for encryption
+
+app.use(session({ //express-sessions are creating the cookies by it's self - it's the reason we don't need the cookie Parser above
+  name: 'session-id',
+  secret: '12345-67890-09876-54321',
+  saveUninitialized: false,
+  resave: false, //once session is created and saved it's continued to be resaved - mainly keep to mark it as active session
+  store: new FileStore()
+}));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+
+function auth(req, res, next) {
+  console.log(req.session);
+
+  if (!req.session.user) {
+    const err = new Error('You are not authenticated!');
+    err.status = 401;
+    return next(err);
+  } else {
+    if (req.session.user === 'authenticated') {
+      return next();
+    } else {
+      const err = new Error('You are not authenticated!');
+      err.status = 401;
+      return next(err);
+    }
+  }
+}
+
+
+app.use(auth);
+
+app.use(express.static(path.join(__dirname, 'public')));
+
+
 app.use('/campsites', campsiteRouter);
 app.use('/promotions', promotionRouter);
 app.use('/partners', partnerRouter);
