@@ -184,7 +184,7 @@ campsiteRouter.route('/:campsiteId/comments/:commentId')
                             })
                             .catch(err => next(err));
                     } else {
-                        err = new Error(`For deleting the comment for Campsite ${req.params.campsiteId} you must have admin account rights. `)
+                        err = new Error(`For changing the comment for Campsite ${req.params.campsiteId} you must have admin account rights or be the comment author. `)
                         err.status = 403;
                         return next(err);
                     }
@@ -214,7 +214,7 @@ campsiteRouter.route('/:campsiteId/comments/:commentId')
                             })
                             .catch(err => next(err));
                     } else {
-                        err = new Error(`For changes for Campsite ${req.params.campsiteId} you must have admin account rights.`);
+                        err = new Error(`For deleting for Campsite ${req.params.campsiteId} you must have admin account rights or be this comment author.`);
                         err.status = 403;
                         return next(err);
                     }

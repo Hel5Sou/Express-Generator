@@ -41,7 +41,7 @@ verifyAdmin = (req, res, next) => {
     if (req.user.admin) {
         return next();
     } else {
-        res.statusCode = 403;
+        err.statusCode = 403;
         err = new Error("You are not authorized to perform this operation!");
         return next(err);
     }
