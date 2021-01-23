@@ -12,6 +12,7 @@ const userSchema = new Schema({ //pull information and populate comments in subd
         type: String,
         default: ''
     },
+    facebookID: String,
     admin: {
         type: Boolean,
         default: false
